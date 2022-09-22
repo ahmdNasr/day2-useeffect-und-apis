@@ -1,23 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import "./App.css";
 
+// API
+// useEffect
 function App() {
+  // Wert mit Zustand zu verwalten ... -> "Wert der sich ändert"
+  const [users, setUsers] = useState([]);
+
+  // ein useEffect wird IMMER mindestens 1 Mal ausgeführt.
+  // danach nur dann wenn sich Werte im dependency array ändern.
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/users/")
+      .then((response) => response.json())
+      .then((data) => setUsers(data));
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {users.map((u) => (
+        <div>
+          <h1 key={u.id}>{u.name}</h1>
+          <p>Lat: {u.address.geo.lat}</p>
+          <p>Lng: {u.address.geo.lng}</p>
+        </div>
+      ))}
     </div>
   );
 }
